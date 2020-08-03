@@ -1,21 +1,29 @@
 # Listfortress is a website containing a list of X-Wing tournaments
 
 from bs4 import BeautifulSoup
-import requests
+from requests import get
+from datetime import date
+from os import path
 
-with open('scrap.csv', 'w', encoding='utf-8') as f:
+# Creates a filename based on script name + current date
+filename = path.basename(__file__)[:-3] + '_' + str(date.today()) + '.csv'
 
-    page = 1
-    #while(True):
-    for k in range(1,58):
+# Obtains last page
+address = 'https://listfortress.com/tournaments'
+req = get(address)
+soup = BeautifulSoup(req.text, 'lxml')
+match = soup.find('ul', class_='pagination justify-content-center')
+match = match.find_all('li')
+lastPage = int(match[len(match)-2].text)
+
+with open(filename, 'w', encoding='utf-8') as f:
+
+    for page in range(1, lastPage + 1):
         print('Scraping page ' + str(page) + ' ...')
         param = {'page': page}
-        address = 'https://listfortress.com/tournaments'
-
-        req = requests.get(address, param)
+        req = get(address, param)
         soup = BeautifulSoup(req.text, 'lxml')
 
-        #tournament = soup.tbody.find('tr')
         for tournament in soup.tbody.find_all('tr'):
             column = 0
             for info in tournament.find_all('td'):
@@ -24,13 +32,12 @@ with open('scrap.csv', 'w', encoding='utf-8') as f:
                     f.write(',')
                 column += 1
 
-        page += 1
-
 # Removes one from every two lines
 print('Removing lines ...')
-lines = open('scrap.csv', 'r', encoding='utf-8').readlines()[::2]
-with open('scrap.csv', 'w', encoding='utf-8') as f:
+lines = open(filename, 'r', encoding='utf-8').readlines()[::2]
+with open(filename, 'w', encoding='utf-8') as f:
     for i in lines:
         f.write(i)
 
-print('Finished')
+print('Scraping completed.\n<Press any key to exit>')
+input()
