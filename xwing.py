@@ -10,8 +10,8 @@ filename = path.basename(__file__)[:-3] + '_' + str(date.today()) + '.csv'
 
 # Obtains last page
 address = 'https://listfortress.com/tournaments'
-req = get(address)
-soup = BeautifulSoup(req.text, 'lxml')
+req = get(address).text
+soup = BeautifulSoup(req, 'lxml')
 match = soup.find('ul', class_='pagination justify-content-center')
 match = match.find_all('li')
 lastPage = int(match[len(match)-2].text)
@@ -21,8 +21,8 @@ with open(filename, 'w', encoding='utf-8') as f:
     for page in range(1, lastPage + 1):
         print('Scraping page ' + str(page) + ' ...')
         param = {'page': page}
-        req = get(address, param)
-        soup = BeautifulSoup(req.text, 'lxml')
+        req = get(address, param).text
+        soup = BeautifulSoup(req, 'lxml')
 
         for tournament in soup.tbody.find_all('tr'):
             column = 0
