@@ -1,19 +1,6 @@
 from bs4 import BeautifulSoup
 from requests import get
 
-teams = ['orioles', 'redsox', 'whitesox', 'indians', 'tigers', 'astros',
-        'royals', 'angels', 'twins', 'yankees', 'athletics', 'mariners',
-        'rays', 'rangers', 'bluejays', 'diamondbacks', 'braves', 'cubs',
-        'reds', 'rockies', 'dodgers', 'marlins', 'brewers', 'mets',
-        'phillies', 'pirates', 'padres', 'giants', 'cardinals', 'nationals']
-
-"""
-for team in teams:
-    address = 'https://www.mlb.com/' + team + '/roster/40-man'
-    req = get(address).text
-    soup = BeautifulSoup(req, 'lxml')
-    print(address)
-"""
 
 def roster_update(team):
     """Updates roster for selected team."""
@@ -31,4 +18,20 @@ def roster_update(team):
             print(jerseys[i].text + ' ' + players[i].text)
         print()
 
-roster_update('padres')
+
+def update_all():
+    """Updates roster for every team."""
+    teams = ['angels', 'astros', 'athletics', 'bluejays', 'braves', 'brewers',
+            'cardinals', 'cubs', 'dbacks', 'dodgers', 'giants', 'indians',
+            'mariners', 'marlins', 'mets', 'nationals', 'orioles', 'padres',
+            'phillies', 'pirates', 'rangers', 'rays', 'reds', 'redsox',
+            'rockies', 'royals', 'tigers', 'twins', 'whitesox', 'yankees']
+
+    for team in teams:
+        print(team)
+        roster_update(team)
+        print()
+
+
+#roster_update('padres')
+update_all()
