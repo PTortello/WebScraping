@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
 from requests import get
+from os import path
+
+filedir = path.dirname(path.realpath('__file__'))
 
 
 def roster_update(team):
@@ -8,30 +11,29 @@ def roster_update(team):
     req = get(address).text
     soup = BeautifulSoup(req, 'lxml')
 
-    for position in soup.find_all('table', class_='roster__table'):
-        players = position.tbody.find_all('a')
-        jerseys = position.tbody.find_all('span', class_='jersey')
-        position = position.find('td')
+    filename = path.join(filedir, 'teams/' + team + '.txt')
+    with open(filename, 'w') as f:
+        f.write(team.title() + '\n')
 
-        print(position.text[:-1])
-        for i in range(len(players)):
-            print(jerseys[i].text + ' ' + players[i].text)
-        print()
+        for position in soup.find_all('table', class_='roster__table'):
+            players = position.tbody.find_all('a')
+            jerseys = position.tbody.find_all('span', class_='jersey')
+            position = position.find('td')
+
+            for i in range(len(players)):
+                f.write(jerseys[i].text + ',' + players[i].text + ',' +
+                    position.text[:-1] + '\n')
 
 
 def update_all():
     """Updates roster for every team."""
-    teams = ['angels', 'astros', 'athletics', 'bluejays', 'braves', 'brewers',
+    teams = ('angels', 'astros', 'athletics', 'bluejays', 'braves', 'brewers',
             'cardinals', 'cubs', 'dbacks', 'dodgers', 'giants', 'indians',
             'mariners', 'marlins', 'mets', 'nationals', 'orioles', 'padres',
             'phillies', 'pirates', 'rangers', 'rays', 'reds', 'redsox',
-            'rockies', 'royals', 'tigers', 'twins', 'whitesox', 'yankees']
-
+            'rockies', 'royals', 'tigers', 'twins', 'whitesox', 'yankees')
     for team in teams:
-        print(team)
         roster_update(team)
-        print()
 
 
-#roster_update('padres')
-update_all()
+roster_update('angels')
