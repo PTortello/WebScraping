@@ -11,7 +11,7 @@ def roster_update(team):
     req = get(address).text
     soup = BeautifulSoup(req, 'lxml')
 
-    filename = path.join(filedir, 'teams/' + team + '.txt')
+    filename = path.join(filedir, 'teams/' + team + '.csv')
     with open(filename, 'w') as f:
         f.write(team.title() + '\n')
 
