@@ -1,7 +1,8 @@
 """
 tempscrap.py
 Pedro Tortello - 08/2020
-Current temperature web scraping for choosen location.
+Current temperature for choosen location
+Web scraping from climatempo.com.br
 """
 
 from bs4 import BeautifulSoup
