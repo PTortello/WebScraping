@@ -13,5 +13,5 @@ match = soup.find('div', id='mainContent')
 match = match.find_all('span')
 match = match[7].text[1:3]
 
-print(match)
+print(match + '\xb0C')
 input()
